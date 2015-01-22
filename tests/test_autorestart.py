@@ -43,32 +43,32 @@ class TestAutoRestart(unittest.TestCase):
 
         return sorted([int(p) for p in pids], reverse=True)
 
-    def test_foreground(self):
-        self._start_foreground()
+    # def test_foreground(self):
+    #     self._start_foreground()
 
-        grep_str = 'agent.py foreground'
-        child_pid, parent_pid = self._get_child_parent_pids(grep_str)
+    #     grep_str = 'agent.py foreground'
+    #     child_pid, parent_pid = self._get_child_parent_pids(grep_str)
 
-        # Try killing the parent proc, confirm that the child is killed as well.
-        os.kill(parent_pid, signal.SIGTERM)
-        os.waitpid(parent_pid, 0)
-        time.sleep(6)
-        self.assertRaises(OSError, os.kill, child_pid, signal.SIGTERM)
+    #     # Try killing the parent proc, confirm that the child is killed as well.
+    #     os.kill(parent_pid, signal.SIGTERM)
+    #     os.waitpid(parent_pid, 0)
+    #     time.sleep(6)
+    #     self.assertRaises(OSError, os.kill, child_pid, signal.SIGTERM)
 
-        # Restart the foreground agent.
-        self._start_foreground()
-        child_pid, parent_pid = self._get_child_parent_pids(grep_str)
+    #     # Restart the foreground agent.
+    #     self._start_foreground()
+    #     child_pid, parent_pid = self._get_child_parent_pids(grep_str)
 
-        # Set a SIGUSR1 to the child to force an auto-restart exit.
-        os.kill(child_pid, signal.SIGUSR1)
-        time.sleep(6)
+    #     # Set a SIGUSR1 to the child to force an auto-restart exit.
+    #     os.kill(child_pid, signal.SIGUSR1)
+    #     time.sleep(6)
 
-        # Confirm that the child is still alive
-        child_pid, parent_pid = self._get_child_parent_pids(grep_str)
+    #     # Confirm that the child is still alive
+    #     child_pid, parent_pid = self._get_child_parent_pids(grep_str)
 
-        # Kill the foreground process.
-        self.agent_foreground.terminate()
-        self.agent_foreground = None
+    #     # Kill the foreground process.
+    #     self.agent_foreground.terminate()
+    #     self.agent_foreground = None
 
     def test_daemon(self):
         self._start_daemon()
